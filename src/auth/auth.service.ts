@@ -64,29 +64,30 @@ export class AuthService {
   async login(credentials: LoginDto) {
     const { email, password } = credentials;
   
-    // Find if user exists by email
+    // Trouver l'utilisateur par email dans la base de données
     const user = await this.UserModel.findOne({ email });
     if (!user) {
-      throw new UnauthorizedException('Wrong credentials');
+        throw new UnauthorizedException('Wrong credentials');
     }
   
-    // Compare entered password with existing password
+    // Comparer le mot de passe entré avec le mot de passe stocké dans la base de données
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw new UnauthorizedException('Wrong credentials');
+        throw new UnauthorizedException('Wrong credentials');
     }
   
-    // Generate JWT tokens
+    // Générer les tokens JWT
     const tokens = await this.generateUserTokens(user._id);
   
-    // Return response with statusCode and user information
+    // Retourner la réponse avec le message de succès, le statusCode, et les tokens
     return {
       statusCode: HttpStatus.OK,
       userId: user._id,
+      name: user.name,
       ...tokens,
     };
-  }
-
+  
+}
 
 
   async changePassword(userId, oldPassword: string, newPassword: string) {

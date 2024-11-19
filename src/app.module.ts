@@ -9,6 +9,7 @@ import { RolesModule } from './roles/roles.module';
 import { UserModule } from './user/user.module';
 import { ProduitModule } from './produit/produit.module';
 import { OrderModule } from './order/order.module';
+import { CarModule } from './car/car.module';
 import config from './config/config';
 
 
@@ -39,6 +40,7 @@ import config from './config/config';
     UserModule,
     ProduitModule,
     OrderModule,
+    CarModule,
   ],
   controllers: [AppController],
   providers: [AppService],
