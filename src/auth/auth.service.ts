@@ -34,7 +34,7 @@ export class AuthService {
   ) {}
 
   async signup(signupData: SignupDto) {
-    const { email, password, name } = signupData;
+    const { email, password, name, permi } = signupData;
   
     // Check if email is in use
     const emailInUse = await this.UserModel.findOne({ email });
@@ -51,6 +51,7 @@ export class AuthService {
       name,
       email,
       password: hashedPassword,
+      permi,
     });
   
     // Return the response with statusCode and user information
