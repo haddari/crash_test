@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Put, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dtos/signup.dto';
 import { LoginDto } from './dtos/login.dto';
@@ -8,6 +8,7 @@ import { AuthenticationGuard } from 'src/guards/authentication.guard';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UpdateProfileDto } from './dtos/updateprofile.dto';
 
 @ApiTags('example')
 @Controller('auth')
@@ -56,4 +57,21 @@ export class AuthController {
       resetPasswordDto.resetToken,
     );
   }
+  @UseGuards(AuthenticationGuard)
+@Put('updateprof')
+async updateProfile(
+  @Body() updateProfileDto: UpdateProfileDto,
+  @Req() req,
+) {
+  console.log(req.user); // Debug: Check the contents of req.user
+  if (!req.user) {
+    throw new UnauthorizedException('User not authenticated');
+  }
+  const userId = req.user.id;
+  const { email, name } = updateProfileDto;
+  return this.authService.updateProfile(userId, email, name);
+}
+
+  
+  
 }

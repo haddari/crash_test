@@ -109,7 +109,46 @@ export class AuthService {
     user.password = newHashedPassword;
     await user.save();
   }
-
+  async updateProfile(
+    userId: string,
+    email: string,
+    name: string,
+  ) {
+    // Find the user by ID (use userId from the authentication token)
+    const user = await this.UserModel.findById(userId);
+  
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+  
+    // Check if the new email is already in use by another user
+    if (email && email !== user.email) {
+      const emailExists = await this.UserModel.findOne({ email });
+      if (emailExists) {
+        throw new BadRequestException('Email is already in use');
+      }
+      user.email = email;
+    }
+  
+    // Update the name if provided
+    if (name) {
+      user.name = name;
+    }
+  
+    // Save the updated user details
+    await user.save();
+  
+    // Return the updated user object or success message
+    return {
+      message: 'Profile updated successfully',
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+    };
+  }
+  
   async forgotPassword(email: string) {
     //Check that user exists
     const user = await this.UserModel.findOne({ email });

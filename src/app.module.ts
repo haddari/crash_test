@@ -11,6 +11,7 @@ import { ProduitModule } from './produit/produit.module';
 import { OrderModule } from './order/order.module';
 import { CarModule } from './car/car.module';
 import { AssuranceModule } from './assurance/assurance.module';
+import { AccidentModule } from './accident/accident.module';
 import config from './config/config';
 
 
@@ -43,6 +44,7 @@ import config from './config/config';
     OrderModule,
     CarModule,
     AssuranceModule,
+    AccidentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
