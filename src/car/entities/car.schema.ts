@@ -10,7 +10,7 @@ export class Car extends Document {
   @Prop({ required: true })
   type: string; // Car type (e.g., sedan, SUV, etc.).
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true  })
   numch: number; // Integer value (e.g., number of horsepower or any other relevant detail).
 
   @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dtos/signup.dto';
 import { LoginDto } from './dtos/login.dto';
@@ -9,7 +9,11 @@ import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UpdateProfileDto } from './dtos/updateprofile.dto';
+import { GoogleAuthGuard } from './google-auth.guard';
 
+interface AuthRequest extends Request {
+  user?: any; // Define `user` based on what GoogleAuthGuard attaches
+}
 @ApiTags('example')
 @Controller('auth')
 export class AuthController {
@@ -70,6 +74,25 @@ async updateProfile(
   const userId = req.user.id;
   const { email, name } = updateProfileDto;
   return this.authService.updateProfile(userId, email, name);
+}
+@Get('google')
+@UseGuards(GoogleAuthGuard)
+async googleLogin() {
+  // Initiates the Google OAuth flow
+}
+
+// Google login redirect
+@Get('google/callback')
+@UseGuards(GoogleAuthGuard)
+async googleLoginRedirect(@Req() req: AuthRequest) { // Use AuthRequest to access req.user
+
+  var userDto = new LoginDto()
+  userDto.email = req.user.email
+  userDto.password = req.user.password
+
+  return this.authService.loginGoogle(req.user)
+  //this.authService.login(userDto) // Log in the user
+
 }
 
   

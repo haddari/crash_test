@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AccidentService } from './accident.service';
 import { AuthenticationGuard } from 'src/guards/authentication.guard';
-import { response } from 'express';
+import { Response } from 'express';
 
 @Controller('accidents')
 export class AccidentController {

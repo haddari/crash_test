@@ -9,7 +9,7 @@ import {
 import { SignupDto } from './dtos/signup.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../user/entities/user.schema';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -237,4 +237,75 @@ export class AuthService {
     const role = await this.rolesService.getRoleById(user.roleId.toString());
     return role.permissions;
   }
+  async loginGoogle(credentials: LoginDto) {
+
+    const { email, password } = credentials;
+
+    // Find if user exists by email
+    const user = await this.UserModel.findOne({ email });
+    if (!user) {
+      throw new UnauthorizedException('Wrong credentials');
+    }
+
+    // Compare entered password with existing password
+    const passwordMatch = password == user.password;
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Wrong credentials this erorr ids from our');
+    }
+
+    // Generate JWT tokens
+    const tokens = await this.generateUserTokens(user._id);
+
+    // Return response with statusCode and user information
+    return {
+      statusCode: HttpStatus.OK,
+      userId: user._id,
+      //userName: user.name,
+      //userEmail: user.email,
+      //userPassword: user.password,
+
+      ...tokens,
+    };
+  }
+  async findUserById(userId: string) {
+    // Validate the ID format before querying the database
+    if (!Types.ObjectId.isValid(userId)) {
+      throw new NotFoundException('Invalid user ID format');
+    }
+
+    const user = await this.UserModel.findById(userId).exec();
+
+    if (!user) {
+
+      return user
+
+    }
+
+    return user;
+  }
+  async findUserByEmail(email: string): Promise<User | null> {
+    return this.UserModel.findOne({ email }).exec();
+  }
+  async findOrCreateUser(profile: any) {
+    const email = profile.emails[0].value;
+    const name = profile.displayName;
+    const permi = profile.displayName;
+    // Check if the user already exists
+    let user = await this.findUserByEmail(email);
+    if (!user) {
+      // If user doesn't exist, create a new one with a placeholder password
+      const newUser: SignupDto = {
+        email,
+        name,
+        permi,
+        password: '', // Leave main password empty as it's handled by Google
+      };
+      const signupResult = await this.signup(newUser);
+      user = signupResult.data; // Access the created user directly from the signup result
+
+    }
+
+    return user;
+  }
+
 }
