@@ -6,11 +6,14 @@ import { CarService } from './car.service';
 import { CarController } from './car.controller';
 import { UserModule } from '../user/user.module';
 import { AccidentModule } from '../accident/accident.module'; // Import UserModule
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Car.name, schema: CarSchema }]),
-    UserModule,AccidentModule, // Import UserModule to access UserModel
+    UserModule,AccidentModule,MulterModule.register({
+      dest: './uploads', 
+    }), 
   ],
   providers: [CarService],
   controllers: [CarController],

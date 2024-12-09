@@ -16,6 +16,15 @@ export class Assurance extends Document {
   @Prop({ required: true })
   attestation: string; 
 
+  @Prop({ required: true })
+  dateDebu: Date; 
+
+  @Prop({ required: true })
+  dateFin: Date; 
+
+  @Prop({ required: true })
+  type: string;
+
   @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
   userId: Types.ObjectId;
 }

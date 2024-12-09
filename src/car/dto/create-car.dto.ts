@@ -1,1 +1,7 @@
-export class CreateCarDto {}
+export class CreateCarDto {
+    matricule: string;
+    type: string;
+    numch: number;
+    userId: string;
+    photo?: string;
+  }

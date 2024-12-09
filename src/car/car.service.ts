@@ -12,30 +12,41 @@ export class CarService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-   // Method to create a car for a specific user
-   async createCar(userId: any, createCarDto: { matricule: string; type: string; numch: number }): Promise<Car> {
+  async createCar(
+    userId: string,
+    createCarDto: { matricule: string; type: string; numch: number; photo?: string },
+  ): Promise<Car> {
     // Validate the userId format
-   /* if (!isValidObjectId(userId)) {
+   /* if (!Types.ObjectId.isValid(userId)) {
       throw new BadRequestException('Invalid user ID format');
     }*/
-
+  
     // Find the user by ID
     const user = await this.userModel.findById(userId);
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
+  
     // Create a new car and associate it with the user
-    const newCar = new this.carModel({ ...createCarDto, userId: userId });
+    const newCar = new this.carModel({
+      ...createCarDto,
+      userId: userId,
+      photo: createCarDto.photo ,
+    });
+  
     const car = await newCar.save();
-
-    // Optionally, add the car reference to the user's list of cars
+  
+    // Add the car reference to the user's list of cars
+    if (!user.cars) {
+      user.cars = [];
+    }
     user.cars.push(car._id as Types.ObjectId);
-
     await user.save();
-
+  
     return car;
   }
+  
+  
 
   // Method to find all cars
   async findAllCars(): Promise<Car[]> {

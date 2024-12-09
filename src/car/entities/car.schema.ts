@@ -15,6 +15,10 @@ export class Car extends Document {
 
   @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
   userId: Types.ObjectId; // References the User that owns this car.
+
+  @Prop({ type: String, default: null })
+  photo: string; 
+
 }
 
 export const CarSchema = SchemaFactory.createForClass(Car);
