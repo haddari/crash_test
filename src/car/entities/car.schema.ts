@@ -5,19 +5,19 @@ import { User } from 'src/user/entities/user.schema';
 @Schema()
 export class Car extends Document {
   @Prop({ required: true, unique: true })
-  matricule: string; // Unique identifier for a car, like a license plate number.
+  matricule: string;
 
   @Prop({ required: true })
-  type: string; // Car type (e.g., sedan, SUV, etc.).
+  type: string; 
 
   @Prop({ required: true, unique: true  })
-  numch: number; // Integer value (e.g., number of horsepower or any other relevant detail).
+  numch: number; 
 
   @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
-  userId: Types.ObjectId; // References the User that owns this car.
+  userId: Types.ObjectId; 
 
   @Prop({ type: String, default: null })
-  photo: string; 
+  photo: string;
 
 }
 
