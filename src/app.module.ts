@@ -14,6 +14,8 @@ import { AssuranceModule } from './assurance/assurance.module';
 import { AccidentModule } from './accident/accident.module';
 import config from './config/config';
 
+import { GemModule } from './gem/gem.module';
+
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import config from './config/config';
     CarModule,
     AssuranceModule,
     AccidentModule,
+    GemModule,
   ],
   controllers: [AppController],
   providers: [AppService],

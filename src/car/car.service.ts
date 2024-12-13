@@ -14,7 +14,7 @@ export class CarService {
 
   async createCar(
     userId: string,
-    createCarDto: { matricule: string; type: string; numch: number; photo?: string },
+    createCarDto: { matricule: string; type: string; numch: number;},
   ): Promise<Car> {
     // Validate the userId format
    /* if (!Types.ObjectId.isValid(userId)) {
@@ -31,7 +31,7 @@ export class CarService {
     const newCar = new this.carModel({
       ...createCarDto,
       userId: userId,
-      photo: createCarDto.photo ,
+    
     });
   
     const car = await newCar.save();

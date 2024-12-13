@@ -3,5 +3,5 @@ export class CreateCarDto {
     type: string;
     numch: number;
     userId: string;
-    photo?: string;
+  
   }
